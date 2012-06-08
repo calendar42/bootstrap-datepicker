@@ -28,7 +28,8 @@
 		this.language = this.language in dates ? this.language : "en";
 		this.format = DPGlobal.parseFormat(options.format||this.element.data('date-format')||'mm/dd/yyyy');
 		this.picker = $(DPGlobal.template)
-							.appendTo('body')
+                            .attr('data-element-id', this.element.attr('id'))
+                            .appendTo('body')
 							.on({
 								click: $.proxy(this.click, this),
 								mousedown: $.proxy(this.mousedown, this)
@@ -571,9 +572,15 @@
 				data = $this.data('datepicker'),
 				options = typeof option == 'object' && option;
 			if (!data) {
+                $('.datepicker[data-element-id="' + $this.attr('id') + '"]').remove(); // TODO: Have a better way of reusing the datepicker
 				$this.data('datepicker', (data = new Datepicker(this, $.extend({}, $.fn.datepicker.defaults,options))));
 			}
-			if (typeof option == 'string') data[option].apply(data, args);
+			if (typeof option == 'string' && option === 'destroy') {
+                data.picker.remove();
+                $this.removeData('datepicker');
+			} else if (typeof option == 'string') {
+                data[option].apply(data, args);
+            }
 		});
 	};
 
