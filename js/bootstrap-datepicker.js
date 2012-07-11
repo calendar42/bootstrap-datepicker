@@ -257,25 +257,40 @@
 			nextMonth = nextMonth.valueOf();
 			html = [];
 			var clsName;
+			var today = new Date();
+			today.setHours(0);
+			today.setMinutes(0);
+			today.setSeconds(0);
+			today.setMilliseconds(0);
+
+			var rowContent = '';
+			var rowClass = '';
 			while(prevMonth.valueOf() < nextMonth) {
-				if (prevMonth.getDay() == this.weekStart) {
-					html.push('<tr>');
-				}
 				clsName = '';
 				if (prevMonth.getFullYear() < year || (prevMonth.getFullYear() == year && prevMonth.getMonth() < month)) {
 					clsName += ' old';
 				} else if (prevMonth.getFullYear() > year || (prevMonth.getFullYear() == year && prevMonth.getMonth() > month)) {
 					clsName += ' new';
 				}
+				if (prevMonth.valueOf() === today.valueOf()) {
+					clsName += ' today';
+				}
 				if (prevMonth.valueOf() == currentDate) {
 					clsName += ' active';
+					rowClass += ' active';
 				}
 				if (prevMonth.valueOf() < this.startDate || prevMonth.valueOf() > this.endDate) {
 					clsName += ' disabled';
 				}
-				html.push('<td class="day'+clsName+'">'+prevMonth.getDate() + '</td>');
+
+				rowContent += '<td class="day'+clsName+'">'+prevMonth.getDate() + '</td>';
 				if (prevMonth.getDay() == this.weekEnd) {
+					html.push('<tr class="week'+rowClass+'">');
+					html.push(rowContent);
 					html.push('</tr>');
+
+					rowContent = '';
+					rowClass = '';
 				}
 				prevMonth.setDate(prevMonth.getDate()+1);
 			}
