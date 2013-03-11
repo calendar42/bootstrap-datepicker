@@ -88,7 +88,7 @@
 				this.viewMode = this.startViewMode = 0;
 				break;
 		}
-
+		this.pullRight = this.element.hasClass('pull-right');
 		this.weekStart = ((options.weekStart||this.element.data('date-weekstart')||dates[this.language].weekStart||0) % 7);
 		this.weekEnd = ((this.weekStart + 6) % 7);
 		this.startDate = -Infinity;
@@ -107,6 +107,7 @@
 		show: function(e) {
 			this.picker.show();
 			this.height = this.component ? this.component.outerHeight() : this.element.outerHeight();
+			this.width = this.component ? this.component.outerWidth() : this.element.outerWidth();
 			this.place();
 			$(window).on('resize', $.proxy(this.place, this));
 			if (e ) {
@@ -195,10 +196,18 @@
 
 		place: function(){
 			var offset = this.component ? this.component.offset() : this.element.offset();
-			this.picker.css({
-				top: offset.top + this.height,
-				left: offset.left
-			});
+			if (this.pullRight) {
+				this.picker.css({
+					top: offset.top + this.height,
+					left:'auto',
+					right: window.innerWidth - offset.left - this.width
+				}).addClass('pull-right');
+			} else {
+				this.picker.css({
+					top: offset.top + this.height,
+					left: offset.left
+				});
+			}
 		},
 
 		update: function(){
