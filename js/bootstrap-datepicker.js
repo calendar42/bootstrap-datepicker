@@ -88,6 +88,7 @@
 				this.viewMode = this.startViewMode = 0;
 				break;
 		}
+		this.moveInputCursor = options.moveInputCursor || false;
 		this.pullRight = this.element.hasClass('pull-right');
 		this.weekStart = ((options.weekStart||this.element.data('date-weekstart')||dates[this.language].weekStart||0) % 7);
 		this.weekEnd = ((this.weekStart + 6) % 7);
@@ -523,34 +524,50 @@
 					break;
 				case 37: // left
 				case 39: // right
-					dir = e.keyCode == 37 ? -1 : 1;
-					if (e.ctrlKey){
-						this.date = this.moveYear(this.date, dir);
-						this.viewDate = this.moveYear(this.viewDate, dir);
-					} else if (e.shiftKey){
-						this.date = this.moveMonth(this.date, dir);
-						this.viewDate = this.moveMonth(this.viewDate, dir);
-					} else {
-						this.date.setDate(this.date.getDate() + dir);
-						this.viewDate.setDate(this.viewDate.getDate() + dir);
+					if(this.moveInputCursor === false){
+						dir = e.keyCode == 37 ? -1 : 1;
+						if (e.ctrlKey){
+							this.date = this.moveYear(this.date, dir);
+							this.viewDate = this.moveYear(this.viewDate, dir);
+						} else if (e.shiftKey){
+							this.date = this.moveMonth(this.date, dir);
+							this.viewDate = this.moveMonth(this.viewDate, dir);
+						} else {
+							this.date.setDate(this.date.getDate() + dir);
+							this.viewDate.setDate(this.viewDate.getDate() + dir);
+						}
+						this.setValue();
+						this.update();
+						e.preventDefault();
+						dateChanged = true;
 					}
-					this.setValue();
-					this.update();
-					e.preventDefault();
-					dateChanged = true;
 					break;
 				case 38: // up
 				case 40: // down
-					dir = e.keyCode == 38 ? -1 : 1;
-					if (e.ctrlKey){
-						this.date = this.moveYear(this.date, dir);
-						this.viewDate = this.moveYear(this.viewDate, dir);
-					} else if (e.shiftKey){
-						this.date = this.moveMonth(this.date, dir);
-						this.viewDate = this.moveMonth(this.viewDate, dir);
-					} else {
-						this.date.setDate(this.date.getDate() + dir * 7);
-						this.viewDate.setDate(this.viewDate.getDate() + dir * 7);
+					if(this.moveInputCursor === false){
+						dir = e.keyCode == 38 ? -1 : 1;
+						if (e.ctrlKey){
+							this.date = this.moveYear(this.date, dir);
+							this.viewDate = this.moveYear(this.viewDate, dir);
+						} else if (e.shiftKey){
+							this.date = this.moveMonth(this.date, dir);
+							this.viewDate = this.moveMonth(this.viewDate, dir);
+						} else {
+							this.date.setDate(this.date.getDate() + dir * 7);
+							this.viewDate.setDate(this.viewDate.getDate() + dir * 7);
+						}
+					}else{
+						dir = e.keyCode == 40 ? -1 : 1;
+						if (e.ctrlKey){
+							this.date = this.moveYear(this.date, dir);
+							this.viewDate = this.moveYear(this.viewDate, dir);
+						} else if (e.shiftKey){
+							this.date = this.moveMonth(this.date, dir);
+							this.viewDate = this.moveMonth(this.viewDate, dir);
+						} else {
+							this.date.setDate(this.date.getDate() + dir);
+							this.viewDate.setDate(this.viewDate.getDate() + dir);
+						}
 					}
 					this.setValue();
 					this.update();
