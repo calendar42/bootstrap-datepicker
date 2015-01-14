@@ -557,7 +557,7 @@
 							this.viewDate.setDate(this.viewDate.getDate() + dir * 7);
 						}
 					}else{
-						dir = e.keyCode == 40 ? -1 : 1;
+						dir = e.keyCode == 40 ? 1 : -1;
 						if (e.ctrlKey){
 							this.date = this.moveYear(this.date, dir);
 							this.viewDate = this.moveYear(this.viewDate, dir);
